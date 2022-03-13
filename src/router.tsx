@@ -16,6 +16,8 @@ const Loader = (Component) => (props) => (
 
 const Messenger = Loader(lazy(() => import('src/content/applications/Messenger')));
 const Transactions = Loader(lazy(() => import('src/content/applications/Transactions')));
+const Accounts = Loader(lazy(() => import('src/content/applications/Accounts')));
+const Transfer = Loader(lazy(() => import('src/content/applications/Transfer')));
 
 const routes: PartialRouteObject[] = [
     {
@@ -62,8 +64,12 @@ const routes: PartialRouteObject[] = [
                 element: <Transactions />
             },
             {
-                path: 'bank',
-                element: <Transactions />
+                path: 'accounts',
+                element: <Accounts />
+            },
+            {
+                path: 'transfer',
+                element: <Transfer />
             }
         ]
     }

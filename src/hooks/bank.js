@@ -1,9 +1,9 @@
 import { gql } from '@apollo/client';
 
 export default function useBank() {
-    const getBanks = () => {
+  const getBanks = () => {
 
-    }
+  }
 }
 
 export const ACCOUNTS = gql`
@@ -18,5 +18,43 @@ query accounts {
       name
     }
   }
-}
-`;
+}`;
+
+export const TRANSACTIONS = gql`
+query transactions {
+  transactions {
+    id
+    accountTo {
+      id
+      name
+    }
+    accountFrom {
+      id
+      name
+    }
+    amount
+    datetime    
+  }
+}`;
+
+export const TRANSFER = gql`
+query transfer {
+  withdraws {
+    id
+    account {
+      id
+      name
+    }
+    amount
+    datetime
+  }
+  deposits {
+    id
+    account {
+      id
+      name
+    }
+    amount
+    datetime
+  }
+}`;

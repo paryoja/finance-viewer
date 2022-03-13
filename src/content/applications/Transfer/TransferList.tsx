@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import PropTypes from 'prop-types';
+import Moment from 'react-moment';
 import {
     Tooltip,
     Divider,
@@ -22,19 +23,22 @@ import {
     useTheme,
     CardHeader
 } from '@mui/material';
-import { Account } from 'src/models/bank';
+import { Transfer } from 'src/models/bank';
 
-interface BankListProps {
+interface TransferListProps {
     className?: string;
-    accountList: Account[];
+    transferData: Transfer;
 }
 
-const BankList: FC<BankListProps> = ({ accountList }) => {
-    console.log({ accountList })
+const TransferList: FC<TransferListProps> = ({ transferData }) => {
+    const transferList = [...transferData.withdraws.map((transfer) => { return { ...transfer, type: 'withdraw', compositId: transfer.id + 'w' } }),
+    ...transferData.deposits.map((transfer) => { return { ...transfer, type: 'deposit', compositId: transfer.id + 'd' } })]
+    console.log(transferList)
+    const sortedTransferList = transferList.sort((a, b) => b.datetime > a.datetime ? -1 : (b.datetime < a.datetime ? 1 : 0))
     return (
         <>
             <Card>
-                Hello
+                <CardHeader title="Transfer" />
                 <Divider />
                 <TableContainer>
                     <Table>
@@ -44,23 +48,56 @@ const BankList: FC<BankListProps> = ({ accountList }) => {
                                     <Checkbox />
                                 </TableCell>
                                 <TableCell>
+                                    ID
+                                </TableCell>
+                                <TableCell>
                                     계좌번호
                                 </TableCell>
                                 <TableCell>
-                                    은행
+                                    입금액
                                 </TableCell>
                                 <TableCell>
-                                    잔액
+                                    출금액
                                 </TableCell>
                                 <TableCell>
-                                    마지막 업데이트
+                                    시간
                                 </TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {accountList.map((account) => {
+                            {sortedTransferList.map((account) => {
+                                let amount;
+                                if (account.type === "withdraw") {
+                                    amount = <><TableCell></TableCell><TableCell>
+                                        <Typography
+                                            variant="body1"
+                                            fontWeight="bold"
+                                            color="text.primary"
+                                            gutterBottom
+                                            noWrap
+                                        >
+                                            {account.amount.toLocaleString()}
+                                        </Typography>
+                                    </TableCell>
+                                    </>
+                                }
+                                else {
+                                    amount = <><TableCell>
+                                        <Typography
+                                            variant="body1"
+                                            fontWeight="bold"
+                                            color="text.primary"
+                                            gutterBottom
+                                            noWrap
+                                        >
+                                            {account.amount.toLocaleString()}
+                                        </Typography>
+                                    </TableCell>
+                                        <TableCell></TableCell>
+                                    </>
+                                }
                                 return (
-                                    <TableRow key={account.id}>
+                                    <TableRow key={account.compositId}>
                                         <TableCell padding="checkbox">
                                             <Checkbox />
                                         </TableCell>
@@ -72,7 +109,7 @@ const BankList: FC<BankListProps> = ({ accountList }) => {
                                                 gutterBottom
                                                 noWrap
                                             >
-                                                {account.name}
+                                                {account.id}
                                             </Typography>
                                         </TableCell>
                                         <TableCell>
@@ -83,9 +120,10 @@ const BankList: FC<BankListProps> = ({ accountList }) => {
                                                 gutterBottom
                                                 noWrap
                                             >
-                                                {account.bank.name}
+                                                {account.account.name}
                                             </Typography>
                                         </TableCell>
+                                        {amount}
                                         <TableCell>
                                             <Typography
                                                 variant="body1"
@@ -94,18 +132,7 @@ const BankList: FC<BankListProps> = ({ accountList }) => {
                                                 gutterBottom
                                                 noWrap
                                             >
-                                                {account.amount}
-                                            </Typography>
-                                        </TableCell>
-                                        <TableCell>
-                                            <Typography
-                                                variant="body1"
-                                                fontWeight="bold"
-                                                color="text.primary"
-                                                gutterBottom
-                                                noWrap
-                                            >
-                                                {account.lastUpdated.getDate}
+                                                <Moment format="yy-MM-DD HH:mm:ss">{account.datetime}</Moment>
                                             </Typography>
                                         </TableCell>
                                     </TableRow>
@@ -119,8 +146,8 @@ const BankList: FC<BankListProps> = ({ accountList }) => {
     )
 }
 
-BankList.propTypes = {
-    accountList: PropTypes.array.isRequired
+TransferList.propTypes = {
+    transferData: PropTypes.object.isRequired
 };
 
-export default BankList;
+export default TransferList;
