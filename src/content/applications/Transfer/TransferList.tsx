@@ -2,25 +2,16 @@ import { FC } from 'react';
 import PropTypes from 'prop-types';
 import Moment from 'react-moment';
 import {
-    Tooltip,
     Divider,
-    Box,
-    FormControl,
-    InputLabel,
     Card,
     Checkbox,
-    IconButton,
     Table,
     TableBody,
     TableCell,
     TableHead,
-    TablePagination,
     TableRow,
     TableContainer,
-    Select,
-    MenuItem,
     Typography,
-    useTheme,
     CardHeader
 } from '@mui/material';
 import { Transfer } from 'src/models/bank';
